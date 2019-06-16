@@ -1,4 +1,6 @@
-﻿using FriendOrganizer.UI.Data;
+﻿using Autofac;
+using FriendOrganizer.UI.Data;
+using FriendOrganizer.UI.Startup;
 using FriendOrganizer.UI.ViewModel;
 using System.Windows;
 
@@ -11,8 +13,10 @@ namespace FriendOrganizer.UI
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            // Creating instance and injecting it
-            var mainWindow = new MainWindow(new MainViewModel(new FriendDataService()));
+            var bootstrapper = new Bootstrapper();
+            var container = bootstrapper.Bootstrap();
+
+            var mainWindow = container.Resolve<MainWindow>();
             mainWindow.Show();
         }
     }
