@@ -7,39 +7,19 @@ namespace FriendOrganizer.UI.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        private IFriendDataService _friendDataService;
-        private Friend _selectedFriend;
-
-        public MainViewModel(IFriendDataService dataService)
+        public MainViewModel(INavigationViewModel navigationViewModel, 
+            IFriendDetailViewModel friendDetailViewModel)
         {
-            Friends = new ObservableCollection<Friend>();
-            _friendDataService = dataService;
+            NavigationViewModel = navigationViewModel;
+            FriendDetailViewModel = friendDetailViewModel;
         }
 
-       
-        public ObservableCollection<Friend> Friends { get; set; }
-
-        public Friend SelectedFriend
-        {
-            get { return _selectedFriend; }
-            set
-            {
-                _selectedFriend = value;
-                OnPropertyChanged(nameof(SelectedFriend));
-            }
-        }
+        public INavigationViewModel NavigationViewModel { get; private set; }
+        public IFriendDetailViewModel FriendDetailViewModel { get; private set; }
 
         public async Task LoadAsync()
         {
-            var friends = await _friendDataService.GetAllAsync();
-
-            // Clear existing collection
-            Friends.Clear();
-
-            foreach (var f in friends)
-            {
-                Friends.Add(f);
-            }
+            await NavigationViewModel.LoadAsync();
         }
     }
 }
