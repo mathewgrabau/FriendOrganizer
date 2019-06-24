@@ -2,6 +2,7 @@
 using FriendOrganizer.UI.Data;
 using FriendOrganizer.UI.Startup;
 using FriendOrganizer.UI.ViewModel;
+using System;
 using System.Windows;
 
 namespace FriendOrganizer.UI
@@ -18,6 +19,13 @@ namespace FriendOrganizer.UI
 
             var mainWindow = container.Resolve<MainWindow>();
             mainWindow.Show();
+        }
+
+        private void Application_DispatcherUnhandledException(object sender, 
+            System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;   // mark it as handled to allow it to continue.
+            MessageBox.Show("Unexpected error - " + Environment.NewLine + e.Exception.Message, "Unepxected error");
         }
     }
 }
