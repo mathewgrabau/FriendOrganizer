@@ -22,9 +22,6 @@
             <Style TargetType="{x:Type Label}">
                 <!--<Setter Property="Margin" Value="10 10 10 0" />-->
             </Style>
-            <Style TargetType="{x:Type TextBox}">
-                <!--<Setter Property="Margin" Value="10 0 10 10" />-->
-            </Style>
         </Grid.Resources>
 
         <Label Content="Firstname" Margin="10 10 10 0" />
