@@ -1,4 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace FriendOrganizer.UI.Wrapper
 {
@@ -21,6 +24,47 @@ namespace FriendOrganizer.UI.Wrapper
         {
             typeof(T).GetProperty(propertyName).SetValue(Model, value);
             OnPropertyChanged(propertyName);
+            ValidatePropertyInternal(propertyName, value);
+        }
+
+        private void ValidatePropertyInternal(string propertyName, object currentValue)
+        {
+            ClearErrors(propertyName);
+
+            // 1. Validate the data annotations
+            ValidateDataAnnotations(propertyName, currentValue);
+
+            // 2. Validate custom errors
+            ValidateCustomErrors(propertyName);
+        }
+
+        private void ValidateCustomErrors(string propertyName)
+        {
+            var errors = ValidateProperty(propertyName);
+            if (errors != null)
+            {
+                foreach (var error in errors)
+                {
+                    AddError(propertyName, error);
+                }
+            }
+        }
+
+        private void ValidateDataAnnotations(string propertyName, object currentValue)
+        {
+            var context = new ValidationContext(Model) { MemberName = propertyName };
+            var results = new List<ValidationResult>();
+            Validator.TryValidateProperty(currentValue, context, results);
+
+            foreach (var result in results)
+            {
+                AddError(propertyName, result.ErrorMessage);
+            }
+        }
+
+        protected virtual IEnumerable<string> ValidateProperty(string propertyName)
+        {
+            return null;
         }
     }
 }

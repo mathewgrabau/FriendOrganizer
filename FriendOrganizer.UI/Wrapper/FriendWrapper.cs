@@ -1,5 +1,6 @@
 ﻿using FriendOrganizer.Model;
 using System;
+using System.Collections.Generic;
 
 namespace FriendOrganizer.UI.Wrapper
 {
@@ -17,7 +18,6 @@ namespace FriendOrganizer.UI.Wrapper
             set
             {
                 SetValue(value);
-                ValidateProperty(nameof(FirstName));
             }
         }
 
@@ -39,16 +39,14 @@ namespace FriendOrganizer.UI.Wrapper
             }
         }
 
-        private void ValidateProperty(string propertyName)
+        protected override IEnumerable<string> ValidateProperty(string propertyName)
         {
-            ClearErrors(propertyName);
-
             switch (propertyName)
             {
                 case nameof(FirstName):
                     if (string.Equals(FirstName, "Robot", StringComparison.OrdinalIgnoreCase))
                     {
-                        AddError(propertyName, "Robots are not valid friends");
+                        yield return "Robots are not valid friends";
                     }
                     break;
             }
