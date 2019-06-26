@@ -54,7 +54,7 @@ namespace FriendOrganizer.UI.ViewModel
 
         private bool OnSaveCanExecute()
         {
-            return true;
+            return Friend != null && !Friend.HasErrors;
         }
 
         private async void OnOpenFriendDetailView(int friendId)
@@ -66,6 +66,17 @@ namespace FriendOrganizer.UI.ViewModel
         {
             var friend = await _dataService.GetByIdAsync(friendId);
             Friend = new FriendWrapper(friend);
+
+            // Raising the event to ensure that it's validated.
+            Friend.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(Friend.HasErrors))
+                {
+                    ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+                }
+            };
+
+            ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
         }
     }
 }
