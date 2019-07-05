@@ -7,12 +7,13 @@ using FriendOrganizer.UI.Wrapper;
 using Prism.Commands;
 using Prism.Events;
 
+using FriendOrganizer.UI.Data.Repositories;
 
 namespace FriendOrganizer.UI.ViewModel
 {
     public class FriendDetailViewModel : ViewModelBase, IFriendDetailViewModel
     {
-        private IFriendDataService _dataService;
+        private IFriendRepository _dataService;
         private FriendWrapper _friend;
         private IEventAggregator _eventAggregator;
 
@@ -31,7 +32,7 @@ namespace FriendOrganizer.UI.ViewModel
 
         public ICommand SaveCommand { get; set; }
 
-        public FriendDetailViewModel(IFriendDataService dataService,
+        public FriendDetailViewModel(IFriendRepository dataService,
             IEventAggregator eventAggregator)
         {
             _dataService = dataService;
