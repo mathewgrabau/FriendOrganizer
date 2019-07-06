@@ -8,29 +8,22 @@ namespace FriendOrganizer.UI.Data.Repositories
 {
     public class FriendRepository : IFriendRepository
     {
-        private Func<FriendOrganizerDbContext> _contextCreator;
+        private FriendOrganizerDbContext _context;
 
-        public FriendRepository(Func<FriendOrganizerDbContext> contextCreator)
+        public FriendRepository(FriendOrganizerDbContext context)
         {
-            _contextCreator = contextCreator;
+            _context = context;
         }
 
         public async Task<Friend> GetByIdAsync(int friendId)
         {
-            using (var context = _contextCreator())
-            {
-                return await context.Friends.AsNoTracking().SingleAsync(x => x.Id == friendId);
-            }
+            return await _context.Friends.SingleAsync(x => x.Id == friendId);
         }
 
-        public async Task SaveAsync(Friend friend)
+        public async Task SaveAsync()
         {
-            using (var context = _contextCreator())
-            {
-                context.Friends.Attach(friend); // need to make it known
-                context.Entry(friend).State = EntityState.Modified; // Indicate this has been changed.
-                await context.SaveChangesAsync();
-            }
+            // It is already tracked in terms of the db context (no longer needing to track the mods and attach it).
+            await _context.SaveChangesAsync();
         }
     }
 }

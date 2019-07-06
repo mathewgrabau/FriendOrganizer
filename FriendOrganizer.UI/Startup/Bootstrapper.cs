@@ -1,7 +1,8 @@
 ﻿using Autofac;
 using FriendOrganizer.UI.ViewModel;
-using FriendOrganizer.UI.Data;
 using FriendOrganizer.DataAccess;
+using FriendOrganizer.UI.Data.Lookups;
+using FriendOrganizer.UI.Data.Repositories;
 using Prism.Events;
 
 namespace FriendOrganizer.UI.Startup
