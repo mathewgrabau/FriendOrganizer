@@ -25,5 +25,10 @@ namespace FriendOrganizer.UI.Data.Repositories
             // It is already tracked in terms of the db context (no longer needing to track the mods and attach it).
             await _context.SaveChangesAsync();
         }
+
+        public bool HasChanges()
+        {
+            return _context.ChangeTracker.HasChanges();
+        }
     }
 }
