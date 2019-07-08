@@ -8,10 +8,42 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
 
-        <!-- Navigation item -->
-        <ListView ItemsSource="{Binding Friends}"
-                  SelectedItem="{Binding SelectedFriend, Mode=TwoWay}"
-                   DisplayMemberPath="DisplayMember" />
-
+        <!-- Navigation item - using the ItemsControl changes it to not have a selection-->
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Friends}">
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="HorizontalAlignment" Value="Left" />
+                        <Setter Property="Margin" Value="2" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                
+                <!-- customizing the display using the template -->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding DisplayMember}"
+                                Command="{Binding OpenFriendDetailViewCommand}">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Grid x:Name="grid">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding Property=HorizontalAlignment}" 
+                                                          VerticalAlignment="{TemplateBinding Property=VerticalAlignment}" />
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand" />
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="FontWeight" Value="Normal" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>

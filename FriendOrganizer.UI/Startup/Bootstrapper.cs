@@ -1,8 +1,10 @@
 ﻿using Autofac;
 using FriendOrganizer.UI.ViewModel;
-using FriendOrganizer.UI.Data;
 using FriendOrganizer.DataAccess;
+using FriendOrganizer.UI.Data.Lookups;
+using FriendOrganizer.UI.Data.Repositories;
 using Prism.Events;
+using FriendOrganizer.UI.View.Services;
 
 namespace FriendOrganizer.UI.Startup
 {
@@ -21,6 +23,8 @@ namespace FriendOrganizer.UI.Startup
             builder.RegisterType<MainWindow>().AsSelf();
             builder.RegisterType<FriendRepository>().As<IFriendRepository>();
             builder.RegisterType<LookupDataService>().AsImplementedInterfaces();    // Convenience for doing it.
+
+            builder.RegisterType<MessageDialogService>().As<IMessageDialogService>();
 
             return builder.Build();
         }
