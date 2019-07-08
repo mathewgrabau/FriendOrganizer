@@ -2,7 +2,7 @@
 using FriendOrganizer.UI.Event;
 using Prism.Events;
 using System.Threading.Tasks;
-using System.Windows;
+using FriendOrganizer.UI.View.Services;
 
 namespace FriendOrganizer.UI.ViewModel
 {
@@ -10,14 +10,17 @@ namespace FriendOrganizer.UI.ViewModel
     {
         private IEventAggregator _eventAggregator;
         private IFriendDetailViewModel _friendDetailViewModel;
+        private IMessageDialogService _messageDialogService;
 
         // Switched to the model where creation happens properly.
         public MainViewModel(INavigationViewModel navigationViewModel, 
             Func<IFriendDetailViewModel> friendDetailViewModelCreator, 
-            IEventAggregator eventAggregator)
+            IEventAggregator eventAggregator,
+            IMessageDialogService messageDialogService)
         {
             _friendDetailViewModelCreator = friendDetailViewModelCreator;
             _eventAggregator = eventAggregator;
+            _messageDialogService = messageDialogService;
 
             NavigationViewModel = navigationViewModel;
 
@@ -53,8 +56,8 @@ namespace FriendOrganizer.UI.ViewModel
             // Check for changes to alert the user if they are going to lose changes here
             if (FriendDetailViewModel != null && FriendDetailViewModel.HasChanges)
             {
-                var result = MessageBox.Show("Unsaved changes, navigate away?", "Question", MessageBoxButton.OKCancel);
-                if (result == MessageBoxResult.Cancel)
+                var result = _messageDialogService.ShowOkCancelDialog("Unsaved changes, save them?", "Warning");
+                if (result == MessageDialogResult.Cancel)
                 {
                     return;
                 }
